@@ -31,37 +31,42 @@ const getRandomInt = (min, max) => {
 
 
 const checkForWin = (guess, solution) => {
-  if(guess === solution){
+  if(guess === solution){//if the guess is exactly equal to solution, return win true
     return true;
   }
 
 };
 
-const generateHint = (guess) =>{
-  let guessArray = guess.split('');
-  let solutionArray = solution.split('');
-  let correctLetter = 0;
-  let correctPlace = 0;
+const generateHint = (guess) =>{// take in guess as input
+  let guessArray = guess.split('');//create array out of the guess for comparison
+  let solutionArray = solution.split('');//create array out of the solution
+  let correctLetter = 0; //set counter for right letter right place
+  let correctPlace = 0; //set counter for right letter wrong place
 
-  for(let i =0; i<4; i++){
-    if(guessArray[i]===solutionArray[i]){
+  for(let i =0; i<4; i++){ //create a for loop to loop through comparing guess letter to solution
+    if(guessArray[i]===solutionArray[i]){//if both are same in the same index increase counter
       correctPlace++;
-      guessArray[i] = 1;
-      solutionArray[i] = 0;
+      guessArray[i] = 1; //mutate the guess array in this index so it isn't counted again
+      solutionArray[i] = 0; //mutate the solution array so it isn't counted again
 
-      console.log(`correctPlace is ${correctPlace}`);
-    }
+      console.log(`correctPlace is ${correctPlace}`); //print out counter to check correct value
+    };
   };
 
-  for(let i =0; i<4; i++){
-    for(let ii=0; ii<4; ii++){
-      if(guessArray[ii]===solutionArray[i]){
-        correctLetter++; //if letter is found increase counter
-        guessArray[i] = 1;
-        solutionArray[ii] = 0;
+  for(let i =0; i<4; i++){ // run for loop for length of solution array
+    for(let ii=0; ii<4; ii++){ // run for loop to check guess letter against each of solution letters
+      console.log(`run ${ii} times`);// print out how many times loop has run
 
-      }
-    }
+      //print out what is being compared for comparison notes
+      console.log(`guessArray is ${guessArray[ii]}, and solutionArray is ${solutionArray[i]}`);
+
+      if(guessArray[ii]===solutionArray[i]){
+        correctLetter++; //if right letter in wrong place is found increase counter
+        guessArray[ii] = 1; // mutate guess array so it can't be counted again
+        solutionArray[i] = 0; // mutate solution array so it can't be counted again
+        console.log(`correctLetter is ${correctLetter}`);
+      };
+    };
   };
 
   return `${correctPlace}-${correctLetter}`;
@@ -72,8 +77,13 @@ const mastermind = (guess) => {
   solution = 'abcd'; // Comment this out to generate a random solution
   // your code here
   //generate hint should return a (0-0) format hint
+
+  //put the hint in a variable
   let hint = generateHint(guess);
+  
+  //assign the hint as a string, attached to the guess
   let guessPlus = guess+' '+hint;
+
   //assign the guess to the board for the game
   board.push(guessPlus);
   //create the win conditions for comparison between solution and guess variables
