@@ -28,7 +28,127 @@ const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-/*
+
+
+const checkForWin = (guess, solution) => {
+  if(guess === solution){
+    return true;
+  }
+
+};
+
+const generateHint = (guess) =>{
+  let guessArray = guess.split('');
+  let solutionArray = solution.split('');
+  let correctLetter = 0;
+  let correctPlace = 0;
+
+  for(let i =0; i<4; i++){
+    if(guessArray[i]===solutionArray[i]){
+      correctPlace++;
+      guessArray[i] = 1;
+      solutionArray[i] = 0;
+
+      console.log(`correctPlace is ${correctPlace}`);
+    }
+  };
+
+  for(let i =0; i<4; i++){
+    for(let ii=0; ii<4; ii++){
+      if(guessArray[ii]===solutionArray[i]){
+        correctLetter++; //if letter is found increase counter
+        guessArray[i] = 1;
+        solutionArray[ii] = 0;
+
+      }
+    }
+  };
+
+  return `${correctPlace}-${correctLetter}`;
+
+}
+
+const mastermind = (guess) => {
+  solution = 'abcd'; // Comment this out to generate a random solution
+  // your code here
+  //generate hint should return a (0-0) format hint
+  let hint = generateHint(guess);
+  let guessPlus = guess+' '+hint;
+  //assign the guess to the board for the game
+  board.push(guessPlus);
+  //create the win conditions for comparison between solution and guess variables
+  if(guess === solution){ // if the guess is exactly like the solution, return win
+    console.log("You guessed it!");
+    return 'You guessed it!';
+  }else{ //else return false and keep playing
+    return false;
+  }
+}
+
+
+const getPrompt = () =>  {
+  console.log("Begin by guessing an answer of letters between a-h");
+  rl.question('guess: ', (guess) => {
+    mastermind(guess);
+    printBoard();
+    if(checkForWin(guess, solution)==true){
+      return;
+    };
+    getPrompt();
+  });
+}
+
+// Tests
+
+if (typeof describe === 'function') {
+  solution = 'abcd';
+  describe('#mastermind()', () => {
+    it('should register a guess and generate hints', () => {
+      mastermind('aabb');
+      assert.equal(board.length, 1);
+    });
+    it('should be able to detect a win', () => {
+      assert.equal(mastermind(solution), 'You guessed it!');
+    });
+  });
+
+  describe('#generateHint()', () => {
+    it('should generate hints', () => {
+      assert.equal(generateHint('abdc'), '2-2');
+    });
+    it('should generate hints if solution has duplicates', () => {
+      assert.equal(generateHint('aabb'), '1-1');
+    });
+
+  });
+
+} else {
+
+  generateSolution();
+  getPrompt();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Previous inefficient attempts at creating generateHint functionality
+
+
 const generateHint = () =>  {
   // your code here
   //split up the solution for comparison
@@ -160,101 +280,3 @@ const generateHint = () =>  {
 // console.log(`${rtIdx}-${wrIdx}`);
 //   return `${rtIdx}-${wrIdx}`;
 // }
-
-const checkForWin = (guess, solution) => {
-  if(guess === solution){
-    return true;
-  }
-
-};
-
-const generateHint = (guess) =>{
-  let guessArray = guess.split('');
-  let solutionArray = solution.split('');
-  let correctLetter = 0;
-  let correctPlace = 0;
-
-  for(let i =0; i<4; i++){
-    if(guessArray[i]===solutionArray[i]){
-      correctPlace++;
-      guessArray[i] = 1;
-      solutionArray[i] = 0;
-
-      console.log(`correctPlace is ${correctPlace}`);
-    }
-  };
-
-  for(let i =0; i<4; i++){
-    for(let ii=0; ii<4; ii++){
-      if(guessArray[ii]===solutionArray[i]){
-        correctLetter++; //if letter is found increase counter
-        guessArray[i] = 1;
-        solutionArray[ii] = 0;
-
-      }
-    }
-  };
-
-  return `${correctPlace}-${correctLetter}`;
-
-}
-
-const mastermind = (guess) => {
-  solution = 'abcd'; // Comment this out to generate a random solution
-  // your code here
-  //generate hint should return a (0-0) format hint
-  let hint = generateHint(guess);
-  let guessPlus = guess+' '+hint;
-  //assign the guess to the board for the game
-  board.push(guessPlus);
-  //create the win conditions for comparison between solution and guess variables
-  if(guess === solution){ // if the guess is exactly like the solution, return win
-    console.log("You guessed it!");
-    return 'You guessed it!';
-  }else{ //else return false and keep playing
-    return false;
-  }
-}
-
-
-const getPrompt = () =>  {
-  console.log("Begin by guessing an answer of letters between a-h");
-  rl.question('guess: ', (guess) => {
-    mastermind(guess);
-    printBoard();
-    if(checkForWin(guess, solution)==true){
-      return;
-    };
-    getPrompt();
-  });
-}
-
-// Tests
-
-if (typeof describe === 'function') {
-  solution = 'abcd';
-  describe('#mastermind()', () => {
-    it('should register a guess and generate hints', () => {
-      mastermind('aabb');
-      assert.equal(board.length, 1);
-    });
-    it('should be able to detect a win', () => {
-      assert.equal(mastermind(solution), 'You guessed it!');
-    });
-  });
-
-  describe('#generateHint()', () => {
-    it('should generate hints', () => {
-      assert.equal(generateHint('abdc'), '2-2');
-    });
-    it('should generate hints if solution has duplicates', () => {
-      assert.equal(generateHint('aabb'), '1-1');
-    });
-
-  });
-
-} else {
-
-  generateSolution();
-  getPrompt();
-}
